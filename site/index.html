@@ -44,12 +44,19 @@
         <i class="pencil" aria-hidden="true"></i>
     </aside>
 
-    <div class="rig" id="rig">
-        <div class="mat" aria-hidden="true"></div>
-        <div class="shadow shadow--left" aria-hidden="true"></div>
-        <div class="shadow" aria-hidden="true"></div>
-        <div class="board" aria-hidden="true"></div>
-        <!-- leaves are bound here by book.js -->
+    <!-- Three layers share one pose, so the mat under the book, the book, and the tabs over it move as one. -->
+    <div class="layer under" aria-hidden="true">
+        <div class="mat"></div>
+        <div class="shadow"></div>
+        <div class="shadow shadow--open"></div>
+        <img class="ghost" src="covers/flopro.png" alt="">
+    </div>
+    <iframe class="layer viewer" id="viewer" title="The FloPro book" src="books/flopro.html"></iframe>
+    <div class="layer over">
+        <div class="live" id="live"></div>
+        <div id="tabs"></div>
+        <i class="glow" id="glow" aria-hidden="true"></i>
+        <button class="coverhit" id="cover" type="button" aria-label="Open the book"></button>
     </div>
 
     <nav class="controls" aria-label="Pages">
@@ -61,7 +68,7 @@
 
     <footer class="foot">
         <span>© 2026 FloPro Limited</span>
-        <span>Kingston, Jamaica</span>
+        <a href="https://paper.design/mono" target="_blank" rel="noopener">Page-turn renderer: Paper Mono ↗</a>
     </footer>
 </div>
 
@@ -81,7 +88,7 @@
     <section class="page light contents">
         <div class="eyebrow"><i></i>A studio in five chapters</div>
         <div class="contents__mark wordmark">FloPro</div>
-        <ol class="toc" id="toc"></ol>
+        <ol class="toc"></ol>
         <p class="contents__note">Turn each page the way you would in any book. Every spread is one section of the site.</p>
     </section>
 </template>
@@ -110,6 +117,16 @@
             <a class="end__cta" href="mailto:autom8@floproltd.com">Start a conversation ↗</a>
         </div>
         <div class="meta"><span>© 2026 FloPro Limited</span><a href="https://onechat.floproltd.com" target="_blank" rel="noopener">OneChat ↗</a></div>
+    </section>
+</template>
+
+<template id="t-back">
+    <section class="page accent bback">
+        <header class="cover__top"><span class="wordmark">FloPro</span><span class="micro">floproltd.com</span></header>
+        <div class="bback__body">
+            <h2 class="display">Easier<br><em>to run.</em></h2>
+        </div>
+        <footer class="cover__foot micro"><span>© 2026 FloPro Limited</span><span>Kingston, Jamaica</span></footer>
     </section>
 </template>
 

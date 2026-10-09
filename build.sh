@@ -33,3 +33,27 @@ for book in "${BOOKS[@]}"; do
     ' "site/books/$book.html"
     cp "pages/$book/01.png" "site/covers/$book.png"
 done
+
+# The landing book. Its pages are assembled in the browser by site/book.js, so they are
+# photographed from the page itself (?print=N) over a local server, then bound the same way.
+# Its viewer has no chrome of its own: the landing page draws the controls around it.
+PORT="${PORT:-8799}"
+python3 -m http.server "$PORT" --bind 127.0.0.1 --directory site >/dev/null 2>&1 &
+SERVER=$!
+trap 'kill $SERVER 2>/dev/null' EXIT
+sleep 1
+mkdir pages/flopro
+for i in $(seq 0 19); do
+    "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+        --force-device-scale-factor=1 --window-size=1440,1983 \
+        --virtual-time-budget=8000 \
+        --screenshot="pages/flopro/$(printf '%02d' "$i").png" "http://127.0.0.1:$PORT/index.html?print=$i" >/dev/null 2>&1
+done
+echo "rendered pages/flopro (20 pages)"
+node tools/openzine/scripts/make-book.mjs --input pages/flopro --out site/books/flopro.html --title "FloPro"
+BARE='<style>html:root{--paper:#0b0b0b;--ink:#f0eee9;--muted:#8a8782;--grid:transparent;--metric:#ff5b23;--focus:#ff5b23;--hover:#191919;background:transparent}html:root body{background:transparent}html :is(header,.hint,.controls,.layout,.credit){opacity:0!important;pointer-events:none!important}html .stage::before{display:none}</style>'
+THEME="$BARE" node -e '
+    const fs = require("fs"), f = process.argv[1];
+    fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace("</head>", () => process.env.THEME + "</head>"));
+' site/books/flopro.html
+cp pages/flopro/00.png site/covers/flopro.png
