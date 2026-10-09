@@ -4,80 +4,115 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FloPro — Consulting, software, and AI. Built and run in Kingston.</title>
-<meta name="description" content="FloPro is a Kingston studio for operations consulting, custom software, and conversational AI. Pull a book off the shelf.">
+<meta name="description" content="FloPro is a Kingston studio for operations consulting, custom software, and conversational AI. Open the book.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shelf.css">
+<link rel="stylesheet" href="src/pages.css">
+<link rel="stylesheet" href="book.css">
 </head>
 <body>
 
-<header class="top">
-    <span class="wordmark">FloPro</span>
-    <a class="top__link" href="mailto:autom8@floproltd.com">Let’s talk <span aria-hidden="true">↗</span></a>
-</header>
+<div class="stage closed" id="stage">
+    <div class="desk" aria-hidden="true"></div>
 
-<main>
+    <header class="top">
+        <span class="wordmark">FloPro</span>
+        <span class="top__note">A landing page, bound</span>
+        <span class="top__actions">
+            <button class="pill" id="toggle" type="button">Open the book</button>
+            <a class="top__link" href="mailto:autom8@floproltd.com">Let’s talk <span aria-hidden="true">↗</span></a>
+        </span>
+    </header>
+
     <section class="intro">
-        <div class="eyebrow"><i></i>The FloPro library · four short books</div>
+        <div class="eyebrow"><i></i>The FloPro book · five short chapters</div>
         <h1>Make your business <em>easier to run.</em></h1>
-        <p>FloPro is a Kingston studio for operations consulting, custom software, and conversational AI. Pull a book off the shelf.</p>
+        <p>FloPro is a Kingston studio for operations consulting, custom software, and conversational AI. Open the cover and turn the pages.</p>
     </section>
 
-    <section class="shelf" aria-label="Bookshelf">
-        <div class="row">
-            <div class="slot" style="--f: 0.97; --s: 104px">
-                <button class="book book--accent" data-book="services" aria-label="Open book 01: What we do">
-                    <span class="spine"><span class="spine__idx">01</span><span class="spine__title">What <em>we do</em></span><span class="spine__mark">FloPro</span></span>
-                    <span class="cover"><img src="covers/services.png" alt="" loading="lazy"></span>
-                </button>
-            </div>
-            <div class="slot" style="--f: 0.91; --s: 88px">
-                <button class="book book--dark" data-book="antoinette" aria-label="Open book 02: Meet Antoinette">
-                    <span class="spine"><span class="spine__idx">02</span><span class="spine__title">Meet <em>Antoinette</em></span><span class="spine__mark">FloPro</span></span>
-                    <span class="cover"><img src="covers/antoinette.png" alt="" loading="lazy"></span>
-                </button>
-            </div>
-            <div class="slot" style="--f: 1; --s: 96px">
-                <button class="book book--light" data-book="work" aria-label="Open book 03: Selected work">
-                    <span class="spine"><span class="spine__idx">03</span><span class="spine__title">Selected <em>work</em></span><span class="spine__mark">FloPro</span></span>
-                    <span class="cover"><img src="covers/work.png" alt="" loading="lazy"></span>
-                </button>
-            </div>
-            <div class="slot" style="--f: 0.94; --s: 84px">
-                <button class="book book--stone" data-book="studio" aria-label="Open book 04: The studio">
-                    <span class="spine"><span class="spine__idx">04</span><span class="spine__title">The <em>studio</em></span><span class="spine__mark">FloPro</span></span>
-                    <span class="cover"><img src="covers/studio.png" alt="" loading="lazy"></span>
-                </button>
-            </div>
+    <div class="prop cup" aria-hidden="true"><i></i></div>
 
-            <aside class="card" aria-label="Contact">
-                <div class="card__label">Let’s talk</div>
-                <h2>Tell us what <em>needs fixing.</em></h2>
-                <p>A short note is enough. We reply within 4 business hours.</p>
-                <ul>
-                    <li><span>Email</span><a href="mailto:autom8@floproltd.com">autom8@floproltd.com</a></li>
-                    <li><span>Phone</span><a href="tel:+18768242268">+1 (876) 824-2268</a></li>
-                    <li><span>WhatsApp</span><a href="https://wa.me/18768242268" target="_blank" rel="noopener">Message us ↗</a></li>
-                    <li><span>Office</span><b>161 Constant Spring Road, Kingston</b></li>
-                </ul>
-            </aside>
-        </div>
-        <div class="board"><span>FloPro library</span><span>Click a book to pull it out</span></div>
-    </section>
-</main>
+    <aside class="prop card" aria-label="Contact">
+        <div class="card__label">Let’s talk</div>
+        <h2>Tell us what <em>needs fixing.</em></h2>
+        <ul>
+            <li><span>Email</span><a href="mailto:autom8@floproltd.com">autom8@floproltd.com</a></li>
+            <li><span>Phone</span><a href="tel:+18768242268">+1 (876) 824-2268</a></li>
+            <li><span>WhatsApp</span><a href="https://wa.me/18768242268" target="_blank" rel="noopener">Message us ↗</a></li>
+        </ul>
+        <i class="pencil" aria-hidden="true"></i>
+    </aside>
 
-<footer class="foot">
-    <span>© 2026 FloPro Limited</span>
-    <span>Kingston, Jamaica</span>
-    <a href="https://onechat.floproltd.com" target="_blank" rel="noopener">OneChat ↗</a>
-</footer>
+    <div class="rig" id="rig">
+        <div class="mat" aria-hidden="true"></div>
+        <div class="shadow shadow--left" aria-hidden="true"></div>
+        <div class="shadow" aria-hidden="true"></div>
+        <div class="board" aria-hidden="true"></div>
+        <!-- leaves are bound here by book.js -->
+    </div>
 
-<div class="reader" id="reader">
-    <iframe id="frame" title="Book"></iframe>
-    <button class="reader__close" id="close" type="button"><span aria-hidden="true">←</span> Back to shelf</button>
+    <nav class="controls" aria-label="Pages">
+        <button id="prev" type="button" aria-label="Previous page">←</button>
+        <span id="count">Cover</span>
+        <button id="next" type="button" aria-label="Next page">→</button>
+    </nav>
+    <div class="hint" id="hint">Click the cover</div>
+
+    <footer class="foot">
+        <span>© 2026 FloPro Limited</span>
+        <span>Kingston, Jamaica</span>
+    </footer>
 </div>
 
-<script src="shelf.js"></script>
+<!-- Pages written for the single book. The chapter pages in between come from src/pages.html (copied to site/src by build.sh). -->
+<template id="t-cover">
+    <section class="page accent bcover">
+        <header class="cover__top"><span class="wordmark">FloPro</span><span class="micro">Vol. 01 · 2026</span></header>
+        <div class="bcover__title">
+            <h1>Make your business <em>easier to run.</em></h1>
+            <p>Consulting, software, and AI.<br>Built and run in Kingston.</p>
+        </div>
+        <footer class="cover__foot micro"><span>FloPro Limited</span><span>Kingston, Jamaica</span></footer>
+    </section>
+</template>
+
+<template id="t-contents">
+    <section class="page light contents">
+        <div class="eyebrow"><i></i>A studio in five chapters</div>
+        <div class="contents__mark wordmark">FloPro</div>
+        <ol class="toc" id="toc"></ol>
+        <p class="contents__note">Turn each page the way you would in any book. Every spread is one section of the site.</p>
+    </section>
+</template>
+
+<template id="t-contact">
+    <section class="page dark talk">
+        <div class="eyebrow"><i></i>Let’s talk</div>
+        <h2 class="display">Tell us what<br><em>needs fixing.</em></h2>
+        <p class="lede">A short note is enough. We reply within 4 business hours.</p>
+        <dl class="contact">
+            <div><dt>Email</dt><dd><a href="mailto:autom8@floproltd.com">autom8@floproltd.com</a></dd></div>
+            <div><dt>Phone</dt><dd><a href="tel:+18768242268">+1 (876) 824-2268</a></dd></div>
+            <div><dt>WhatsApp</dt><dd><a href="https://wa.me/18768242268" target="_blank" rel="noopener">Message us ↗</a></dd></div>
+            <div><dt>Office</dt><dd>161 Constant Spring Road, Kingston</dd></div>
+        </dl>
+        <footer class="folio"><span>17</span><span>Let’s talk</span></footer>
+    </section>
+</template>
+
+<template id="t-end">
+    <section class="page light end">
+        <div class="end__body">
+            <span class="wordmark">FloPro</span>
+            <h2 class="display">The <em>end.</em></h2>
+            <p class="body">Written, designed, and bound in Kingston by the people who will answer when you write.</p>
+            <a class="end__cta" href="mailto:autom8@floproltd.com">Start a conversation ↗</a>
+        </div>
+        <div class="meta"><span>© 2026 FloPro Limited</span><a href="https://onechat.floproltd.com" target="_blank" rel="noopener">OneChat ↗</a></div>
+    </section>
+</template>
+
+<script src="book.js"></script>
 </body>
 </html>
