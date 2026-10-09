@@ -7,11 +7,21 @@
     const flat = matchMedia('(max-width: 860px), (orientation: portrait)');
     const still = matchMedia('(prefers-reduced-motion: reduce)');
     // Every pose uses the same function list so the browser interpolates each part, not a matrix.
+    // The move comes before perspective so the vanishing point travels with the book, and the scale
+    // sits outside the turn so it sizes the cover on screen (the cover lies along the book's z axis).
     const pose = (dx, dy, z, turn, k) =>
-        `perspective(1400px) translate(${dx}px, ${dy}px) translateZ(${z}px) rotateY(${turn}deg) scale(${k})`;
+        `translate(${dx}px, ${dy}px) perspective(2000px) translateZ(${z}px) scale(${k}) rotateY(${turn}deg)`;
     const REST = pose(0, 0, 0, 0, 1);
-    const PEEK = pose(0, 0, 70, -32, 1); // the hover pose in shelf.css
+    const PEEK = pose(0, 0, 50, -20, 1); // the hover pose in shelf.css
     let open = null; // { book, slot, flight }
+    let loaded = null; // book id currently in the iframe
+
+    // Hovering a book starts loading it, so the viewer is usually ready by the time the book lands.
+    function load(book) {
+        if (loaded === book.dataset.book) return;
+        loaded = book.dataset.book;
+        frame.src = 'books/' + loaded + '.html';
+    }
 
     // Where the viewer draws the closed front cover on a landscape screen: its spine edge on
     // the centre line, vertically centred, filling most of the stage between the two 48px bars.
@@ -50,25 +60,25 @@
         open = { book, slot, flight: null };
         history.replaceState(null, '', '#' + book.dataset.book);
         document.body.classList.add('reading');
-        frame.src = 'books/' + book.dataset.book + '.html';
-        reader.hidden = false;
-        requestAnimationFrame(() => reader.classList.add('open'));
+        load(book);
+        reader.classList.add('open');
         const ready = viewerReady();
 
         if (animate) {
             slot.classList.add('flying');
             const from = book.matches(':hover') ? PEEK : REST;
             open.flight = book.animate([{ transform: from }, { transform: landing(slot) }], {
-                duration: 900,
-                easing: 'cubic-bezier(0.3, 0, 0.15, 1)',
+                duration: 1100,
+                easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
                 fill: 'forwards',
             });
             await open.flight.finished;
         }
         await ready;
         if (!open || open.book !== book) return;
+        // The viewer comes up underneath the flown cover, then the cover dissolves into it.
         reader.classList.add('ready');
-        if (animate) book.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, fill: 'forwards' });
+        if (animate) book.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, delay: 300, easing: 'ease-in-out', fill: 'forwards' });
         frame.focus();
     }
 
@@ -81,8 +91,8 @@
             book.getAnimations().forEach((a) => a !== flight && a.cancel());
             reader.classList.remove('open');
             const back = book.animate([{ transform: landing(slot) }, { transform: REST }], {
-                duration: 700,
-                easing: 'cubic-bezier(0.3, 0, 0.15, 1)',
+                duration: 900,
+                easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
             });
             flight.cancel();
             await back.finished;
@@ -91,14 +101,17 @@
             reader.classList.remove('open');
             await new Promise((r) => setTimeout(r, 350));
         }
-        reader.hidden = true;
-        frame.removeAttribute('src');
+        frame.src = 'about:blank';
+        loaded = null;
         document.body.classList.remove('reading');
         open = null;
         book.focus({ preventScroll: true });
     }
 
-    document.querySelectorAll('.book').forEach((book) => book.addEventListener('click', () => pull(book)));
+    document.querySelectorAll('.book').forEach((book) => {
+        book.addEventListener('click', () => pull(book));
+        for (const type of ['pointerenter', 'focus']) book.addEventListener(type, () => open || load(book));
+    });
     closeBtn.addEventListener('click', putBack);
     addEventListener('keydown', (e) => e.key === 'Escape' && putBack());
     // Escape pressed while the book itself has focus lands in the iframe, not here.

@@ -61,7 +61,17 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--text); }
 
-main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 20px var(--gutter) 44px; }
+/* Wide screens: the pitch on the left, the shelf on the right. */
+main {
+    --room: 250px; /* viewport height not available to the books */
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 800px);
+    align-items: center;
+    gap: clamp(32px, 4vw, 72px);
+    padding: 20px var(--gutter) 44px;
+}
+.shelf { max-width: 800px; }
 .eyebrow {
     display: flex;
     align-items: center;
@@ -73,14 +83,14 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: space-be
     color: var(--text-3);
 }
 .eyebrow i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px #ff5b2360; }
-.intro h1 { margin-top: 18px; font-size: clamp(38px, 4.6vw, 64px); line-height: 1; font-weight: 600; letter-spacing: -0.045em; }
+.intro h1 { margin-top: 18px; font-size: clamp(38px, 4.9vw, 84px); line-height: 1; font-weight: 600; letter-spacing: -0.045em; }
 .intro h1 em { font-size: 1.08em; letter-spacing: -0.02em; }
-.intro p { margin-top: 20px; max-width: 520px; font-size: 17px; line-height: 1.5; color: var(--text-2); }
+.intro p { margin-top: 24px; max-width: 460px; font-size: 18px; line-height: 1.5; color: var(--text-2); }
 
 /* shelf */
-.row { display: flex; align-items: flex-end; gap: 5px; padding: 0 28px; }
+.row { display: flex; align-items: flex-end; gap: 5px; padding: 0 24px; }
 /* Book height follows the viewport so the whole shelf sits above the fold. */
-.slot { position: relative; width: var(--s); height: clamp(250px, calc((100vh - 400px) * var(--f)), 470px); flex: none; }
+.slot { position: relative; width: var(--s); height: clamp(250px, calc((100vh - var(--room)) * var(--f)), 580px); flex: none; }
 .book {
     position: absolute;
     inset: 0;
@@ -92,7 +102,7 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: space-be
     cursor: pointer;
     transform-style: preserve-3d;
     transform-origin: 100% 50%;
-    transform: perspective(1400px) translateZ(0) rotateY(0deg);
+    transform: perspective(2000px) translateZ(0) rotateY(0deg);
     transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
 }
@@ -114,7 +124,7 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: space-be
     backface-visibility: hidden;
 }
 .spine__idx { font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px; color: var(--hi); }
-.spine__title { writing-mode: vertical-rl; font-size: 23px; font-weight: 600; letter-spacing: -0.8px; white-space: nowrap; }
+.spine__title { writing-mode: vertical-rl; font-size: 27px; font-weight: 600; letter-spacing: -0.8px; white-space: nowrap; }
 .spine__title em { font-size: 1.12em; letter-spacing: -0.3px; color: var(--hi); }
 .spine__mark { writing-mode: vertical-rl; font-family: var(--mono); font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase; opacity: 0.65; }
 .cover {
@@ -134,13 +144,13 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: space-be
 .book:focus-visible { outline: none; }
 .book:focus-visible .spine { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
 @media (hover: hover) {
-    .book:hover { transform: perspective(1400px) translateZ(70px) rotateY(-32deg); }
+    .book:hover { transform: perspective(2000px) translateZ(50px) rotateY(-20deg); }
 }
-.book:focus-visible { transform: perspective(1400px) translateZ(70px) rotateY(-32deg); }
+.book:focus-visible { transform: perspective(2000px) translateZ(50px) rotateY(-20deg); }
 
 .card {
     align-self: flex-end;
-    width: 290px;
+    width: 300px;
     margin: 0 0 0 auto;
     padding: 22px 22px 18px;
     border-radius: 3px;
@@ -179,10 +189,10 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: space-be
 }
 
 /* reader */
-.reader { position: fixed; inset: 0; z-index: 50; background: var(--bg); opacity: 0; transition: opacity 0.6s ease; }
-.reader.open { opacity: 1; }
-.reader[hidden] { display: none; }
-.reader iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity 0.4s ease; }
+/* Kept rendered while closed so a hovered book can load before it is pulled. */
+.reader { position: fixed; inset: 0; z-index: 50; background: var(--bg); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.6s ease, visibility 0s 0.6s; }
+.reader.open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.6s ease, visibility 0s; }
+.reader iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity 0.3s ease; }
 .reader.ready iframe { opacity: 1; }
 .reader__close {
     position: absolute;
@@ -202,9 +212,16 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: space-be
 }
 .reader__close:hover { border-color: var(--accent); color: var(--accent); }
 
+/* Mid widths: pitch above, shelf below. */
+@media (max-width: 1180px) {
+    main { --room: 430px; grid-template-columns: minmax(0, 1fr); align-content: space-between; }
+    .intro h1 { font-size: clamp(38px, 5.6vw, 60px); }
+}
+
 /* Small and portrait screens: the shelf becomes a grid of covers. */
 @media (max-width: 860px), (orientation: portrait) {
-    main { justify-content: flex-start; gap: 36px; }
+    main { align-content: start; gap: 36px; }
+    .shelf { max-width: none; }
     .row { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 14px; padding: 0; }
     .slot { width: auto; height: auto; aspect-ratio: 1 / 1.377; }
     .book, .book:hover, .book:focus-visible { transform: none; transition: none; }
