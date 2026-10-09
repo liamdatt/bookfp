@@ -1,4 +1,4 @@
-# FloPro book — one static HTML file behind nginx.
+# FloPro shelf — static files behind nginx.
 FROM nginx:alpine
-COPY flopro-book.html /usr/share/nginx/html/index.html
+COPY site/ /usr/share/nginx/html/
 EXPOSE 80

@@ -33,6 +33,7 @@ body { background: #2a2a2a; font-family: var(--sans); -webkit-font-smoothing: an
 
 .dark { --page: var(--bg); --ink: var(--text); --ink-2: var(--text-2); --ink-3: var(--text-3); --rule: var(--border-2); }
 .light { --page: #f0eee9; --ink: #0b0b0b; --ink-2: #4a4844; --ink-3: #7b7872; --rule: #0b0b0b22; }
+.stone { --page: #b9b4aa; --ink: #0b0b0b; --ink-2: #2e2c29; --ink-3: #55524d; --rule: #0b0b0b38; }
 .accent { --page: var(--accent); --ink: #100d0b; --ink-2: #2a130a; --ink-3: #5c2410; --rule: #100d0b40; }
 
 em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
@@ -47,6 +48,7 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spa
 .eyebrow { display: flex; align-items: center; gap: 10px; }
 .eyebrow i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .accent .eyebrow i { background: var(--ink); }
+.stone em { color: var(--ink); }
 .wordmark { font-size: 30px; font-weight: 700; letter-spacing: -1.8px; }
 .wordmark::after {
     content: '';
@@ -57,7 +59,7 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spa
     border-radius: 50%;
     background: var(--accent);
 }
-.accent .wordmark::after { background: var(--ink); }
+.accent .wordmark::after, .stone .wordmark::after { background: var(--ink); }
 
 .display { margin-top: 28px; font-size: 54px; line-height: 1.02; font-weight: 600; letter-spacing: -2.4px; }
 .display em { font-size: 1.08em; letter-spacing: -1px; }
@@ -174,3 +176,24 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spa
 .contact dt { font-family: var(--mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); align-self: center; }
 .contact dd { font-size: 19px; font-weight: 500; letter-spacing: -0.3px; }
 .back .cover__foot { margin-top: 40px; border-top: 0; color: var(--ink-3); }
+
+/* per-book covers */
+.statement--sm { margin-top: 120px; font-size: 56px; letter-spacing: -2.5px; }
+.bcover__idx { margin-top: 90px; font-family: var(--serif); font-style: italic; font-size: 250px; line-height: 0.9; color: var(--accent); }
+.accent .bcover__idx, .stone .bcover__idx { color: var(--ink); }
+.bcover__title { margin-top: auto; margin-bottom: 56px; }
+.bcover__title h1 { font-size: 92px; line-height: 0.94; font-weight: 600; letter-spacing: -4.6px; }
+.bcover__title h1 em { font-size: 1.1em; letter-spacing: -2px; }
+.bcover__title p { margin-top: 28px; max-width: 440px; font-size: 20px; line-height: 1.4; color: var(--ink-2); }
+.bcover .cover__foot { margin-top: 0; }
+.bback__body { margin-top: 190px; }
+.bback .display { font-size: 64px; letter-spacing: -3px; }
+.bback .lede { color: var(--ink-2); }
+.bback .cover__foot { margin-top: 40px; border-top: 0; color: var(--ink-3); }
+
+/* work + people spreads */
+.case .shot { margin-top: 40px; }
+.case .lede { margin-top: 40px; max-width: none; }
+.light .clients__row img, .stone .clients__row img { filter: brightness(0); opacity: 0.7; }
+.founder img { display: block; width: 100%; height: 540px; margin-top: 26px; object-fit: cover; object-position: center 18%; border-radius: 6px; filter: grayscale(1) contrast(1.05); }
+.founder .display { margin-top: 30px; }
