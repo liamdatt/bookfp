@@ -141,6 +141,11 @@ main {
 .cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .slot:hover, .slot:focus-within, .slot.flying { z-index: 5; }
 .slot.flying { z-index: 60; }
+.slot.lifted .book { transform: perspective(2000px) translateZ(50px) rotateY(-20deg); }
+/* In flight the live book's cover stands in for the shelf's picture of it. */
+.cover { transition: opacity 0.25s ease; }
+.slot.live .cover { opacity: 0; }
+.slot.out .book { visibility: hidden; }
 .book:focus-visible { outline: none; }
 .book:focus-visible .spine { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
 @media (hover: hover) {
@@ -189,16 +194,19 @@ main {
 }
 
 /* reader */
-/* Kept rendered while closed so a hovered book can load before it is pulled. */
-.reader { position: fixed; inset: 0; z-index: 50; background: var(--bg); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.6s ease, visibility 0s 0.6s; }
-.reader.open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.6s ease, visibility 0s; }
-.reader iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity 0.3s ease; }
-.reader.ready iframe { opacity: 1; }
+/* Kept rendered while closed so a hovered book can load before it is pulled. The iframe is
+   see-through until its book lands, so during the flight only the live cover shows. */
+.reader { position: fixed; inset: 0; z-index: 50; visibility: hidden; pointer-events: none; transition: visibility 0s 0.7s; }
+.reader.open, .reader.showing { visibility: visible; transition: none; }
+.reader.open { pointer-events: auto; }
+.reader::before { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: 0; transition: opacity 0.7s ease; }
+.reader.open::before { opacity: 1; }
+.reader iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; opacity: 0; transition: opacity 0.25s ease; }
+.reader.showing iframe { opacity: 1; }
 .reader__close {
     position: absolute;
     top: 8px;
     right: 14px;
-    z-index: 70;
     min-height: 34px;
     padding: 0 14px;
     border: 1px solid var(--border-2);
@@ -209,7 +217,10 @@ main {
     font-size: 11px;
     letter-spacing: 0.6px;
     cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
+.reader.open .reader__close { opacity: 1; }
 .reader__close:hover { border-color: var(--accent); color: var(--accent); }
 
 /* Mid widths: pitch above, shelf below. */
@@ -233,5 +244,5 @@ main {
     .board { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .book, .reader, .reader iframe { transition: none; }
+    .book, .cover, .reader::before, .reader iframe, .reader__close { transition: none; }
 }
